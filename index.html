@@ -330,29 +330,44 @@
     max-width: 330px;
   }
 
-  /* ── iPhone-specific: fit everything in one screen ──────────────────── */
-  @supports (-webkit-touch-callout: none) {
-    /* Tile size shrinks to fit grid in ~40% of screen height */
-    .tile-cell {
-      aspect-ratio: 1;
-    }
+  /* ── iPhone / small screen: everything fits in one screen, no scroll ── */
+
+  /* Grid: size is driven by available height, not width alone */
+  #grid {
+    /* tile-size = (available-height - header60 - buttons110 - keyboard160 - gaps40) / 6 rows  */
+    /* cap at 300px wide (5 cols × 56px + gaps) */
+    width: min(
+      calc(100vw - 32px),
+      min(
+        calc((100dvh - 370px) * 5 / 6),
+        300px
+      )
+    );
+  }
+
+  /* Keyboard keys: taller text, always legible */
+  .key-base {
+    font-size: 15px !important;
+    font-weight: 700 !important;
+  }
+
+  @media (max-height: 780px) {
     #grid {
-      width: min(calc(100vw - 32px), min(calc((100dvh - 340px) * 5 / 6), 300px));
+      width: min(calc(100vw - 32px), min(calc((100dvh - 350px) * 5 / 6), 280px));
     }
-    /* Keyboard keys slightly shorter on iPhone */
-    .key-base {
-      height: clamp(2.5rem, 5.5dvh, 3.5rem) !important;
-      font-size: clamp(11px, 2.5vw, 14px) !important;
-    }
-    /* Reduce button row gap */
-    .flex.gap-2.mb-1\.5 { gap: 0.375rem !important; margin-bottom: 0.375rem !important; }
-    .flex.gap-2.mb-2    { gap: 0.375rem !important; margin-bottom: 0.375rem !important; }
-    /* Tighter main padding */
-    main { padding-top: 0.5rem !important; padding-bottom: max(0.5rem, env(safe-area-inset-bottom)) !important; gap: 0 !important; }
-    /* Toast area smaller */
+    .key-base { height: 2.8rem !important; font-size: 14px !important; }
+    main { padding-top: 0.25rem !important; }
     .mb-1.h-9 { height: 2rem !important; margin-bottom: 0.25rem !important; }
-    /* Grid margin */
     #grid { margin-bottom: 0.5rem !important; }
+  }
+
+  @media (max-height: 680px) {
+    #grid {
+      width: min(calc(100vw - 32px), min(calc((100dvh - 320px) * 5 / 6), 250px));
+    }
+    .key-base { height: 2.5rem !important; font-size: 13px !important; }
+    .flex.gap-2.mb-1\.5 { margin-bottom: 0.25rem !important; }
+    .flex.gap-2.mb-2    { margin-bottom: 0.25rem !important; }
   }
 
   /* Short screens — tighten spacing, shrink keyboard rows */
@@ -2364,6 +2379,11 @@ $("btn-multi-quit").addEventListener("click",()=>{
     setTimeout(()=>openTutorial(), 800);
   }
 })();
+</script>
+<script>
+  if("serviceWorker" in navigator){
+    navigator.serviceWorker.register("./sw.js");
+  }
 </script>
 <script>
   if(localStorage.getItem("wordvo-pro")!=="1"){
