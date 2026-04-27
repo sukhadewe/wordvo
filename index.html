@@ -489,6 +489,9 @@
       <button id="btn-settings" class="text-zinc-400 hover:text-zinc-50 transition-colors active:scale-90">
         <span class="material-symbols-outlined">settings</span>
       </button>
+      <button id="header-install-btn" title="Install App" style="display:none;" class="items-center gap-1 text-[10px] font-black tracking-wider px-2 py-0.5 rounded border border-green-500 text-green-400 active:scale-90 transition-colors">
+        <span class="material-symbols-outlined" style="font-size:14px;">install_mobile</span>Install
+      </button>
       <button id="btn-pro" class="text-[10px] font-black tracking-wider px-2 py-0.5 rounded border transition-colors active:scale-90" style="border-color:#f59e0b;color:#f59e0b;">⚡PRO</button>
     </div>
   </div>
@@ -2132,12 +2135,37 @@ document.addEventListener("keydown",e=>{
 // PWA INSTALL
 // ════════════════════════════════════════════════════════════════════════
 let deferredPrompt=null;
+const isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
+const isInStandaloneMode=window.matchMedia("(display-mode: standalone)").matches||window.navigator.standalone;
+
 window.addEventListener("beforeinstallprompt",e=>{
   e.preventDefault(); deferredPrompt=e;
+  // show install button in header
+  const hib=document.getElementById("header-install-btn");
+  if(hib) hib.style.display="flex";
   $("btn-install").style.display="block";
 });
+
+// Header install button
+(function(){
+  const hib=document.getElementById("header-install-btn");
+  if(!hib) return;
+  // Always show on iOS (no beforeinstallprompt), hide if already installed
+  if(isIOS && !isInStandaloneMode) hib.style.display="flex";
+  hib.addEventListener("click",()=>{
+    if(deferredPrompt){
+      deferredPrompt.prompt(); deferredPrompt=null;
+      hib.style.display="none";
+    } else if(isIOS){
+      // Show iOS instructions toast
+      showToast("Tap Share → Add to Home Screen 📱");
+    }
+  });
+})();
+
 $("btn-install-action").addEventListener("click",()=>{
   if(deferredPrompt){ deferredPrompt.prompt(); deferredPrompt=null; $("btn-install").style.display="none"; }
+  else if(isIOS){ showToast("Tap Share → Add to Home Screen 📱"); }
 });
 
 // ════════════════════════════════════════════════════════════════════════
