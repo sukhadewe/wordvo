@@ -321,99 +321,102 @@
 
   /* ── Mobile Responsive Layout ─────────────────────────────────────────── */
 
-  /* Grid auto-width: never wider than screen, never wider than 330px */
-  #grid {
-    width: min(calc(100vw - 32px), 330px);
-  }
+  /* Grid + related elements: max 310px wide */
+  #grid,
   #speed-bar-wrap, #player-indicator, #def-box {
-    width: min(calc(100vw - 32px), 330px);
-    max-width: 330px;
+    width: min(calc(100vw - 32px), 310px);
+    max-width: 310px;
   }
 
-  /* ── iPhone / small screen: everything fits in one screen, no scroll ── */
-
-  /* Grid: size is driven by available height, not width alone */
-  #grid {
-    /* tile-size = (available-height - header60 - buttons110 - keyboard160 - gaps40) / 6 rows  */
-    /* cap at 300px wide (5 cols × 56px + gaps) */
-    width: min(
-      calc(100vw - 32px),
-      min(
-        calc((100dvh - 370px) * 5 / 6),
-        300px
-      )
-    );
-  }
-
-  /* Keyboard keys: taller text, always legible */
+  /* Keyboard keys: always readable */
   .key-base {
-    font-size: 15px !important;
-    font-weight: 700 !important;
+    font-size: 16px !important;
+    font-weight: 800 !important;
+    height: 3.2rem !important;
   }
 
-  @media (max-height: 780px) {
+  /* ── All phones (height ≤ 900px) ── */
+  @media (max-height: 900px) {
+    /* Grid shrinks so top row never cuts off:
+       available = dvh - header(52) - toast(36) - buttons(80) - keyboard(150) - gaps(40) */
     #grid {
-      width: min(calc(100vw - 32px), min(calc((100dvh - 350px) * 5 / 6), 280px));
+      width: min(
+        calc(100vw - 32px),
+        min(calc((100dvh - 358px) * 5 / 6), 310px)
+      ) !important;
     }
-    .key-base { height: 2.8rem !important; font-size: 14px !important; }
-    main { padding-top: 0.25rem !important; }
-    .mb-1.h-9 { height: 2rem !important; margin-bottom: 0.25rem !important; }
+    main { padding-top: 0.25rem !important; gap: 0 !important; }
+    .mb-1.h-9 { height: 1.75rem !important; margin-bottom: 0.25rem !important; }
     #grid { margin-bottom: 0.5rem !important; }
+    .key-base { height: 3rem !important; font-size: 16px !important; }
   }
 
-  @media (max-height: 680px) {
+  @media (max-height: 750px) {
     #grid {
-      width: min(calc(100vw - 32px), min(calc((100dvh - 320px) * 5 / 6), 250px));
+      width: min(
+        calc(100vw - 32px),
+        min(calc((100dvh - 330px) * 5 / 6), 270px)
+      ) !important;
     }
-    .key-base { height: 2.5rem !important; font-size: 13px !important; }
-    .flex.gap-2.mb-1\.5 { margin-bottom: 0.25rem !important; }
-    .flex.gap-2.mb-2    { margin-bottom: 0.25rem !important; }
+    .key-base { height: 2.7rem !important; font-size: 15px !important; }
+    /* Compact button rows */
+    #btn-new-game { padding: 0.4rem 0.75rem !important; font-size: 12px !important; }
+    .flex.gap-2.mb-2 button { padding: 0.35rem 0.6rem !important; font-size: 11px !important; }
   }
 
-  /* Short screens — tighten spacing, shrink keyboard rows */
-  @media (max-height: 720px) {
-    main { padding-top: 0.5rem !important; padding-bottom: 0.5rem !important; }
-    .key-base { height: 3rem !important; }
-    #grid { margin-bottom: 0.75rem !important; }
-  }
   @media (max-height: 640px) {
-    main { padding-top: 0.25rem !important; padding-bottom: 0.25rem !important; }
-    .key-base { height: 2.75rem !important; }
-    #grid { margin-bottom: 0.5rem !important; }
-    #def-box { margin-bottom: 0.5rem !important; }
-    .mb-section-margin { margin-bottom: 0.5rem !important; }
-  }
-  @media (max-height: 568px) {
-    .key-base { height: 2.5rem !important; font-size: 11px !important; }
-    .mb-2 { margin-bottom: 0.25rem !important; }
+    #grid {
+      width: min(
+        calc(100vw - 32px),
+        min(calc((100dvh - 300px) * 5 / 6), 240px)
+      ) !important;
+    }
+    .key-base { height: 2.4rem !important; font-size: 14px !important; }
   }
 
-  /* Narrow screens — shrink header icon gap so icons don't overflow */
+  /* Narrow phones — header icons */
   @media (max-width: 430px) {
     header > div { height: 52px !important; }
-    header > div > div:last-child { gap: 0.35rem !important; }
+    header > div > div:last-child { gap: 0.3rem !important; }
     header > div > div:last-child .material-symbols-outlined { font-size: 22px !important; }
-    header h1 { font-size: 1.25rem !important; }
+    header h1 { font-size: 1.2rem !important; }
   }
   @media (max-width: 380px) {
-    header > div > div:last-child { gap: 0.25rem !important; }
+    header > div > div:last-child { gap: 0.2rem !important; }
     header > div > div:last-child .material-symbols-outlined { font-size: 20px !important; }
   }
   @media (max-width: 340px) {
-    header > div > div:last-child { gap: 0.15rem !important; }
+    header > div > div:last-child { gap: 0.12rem !important; }
     header > div > div:last-child .material-symbols-outlined { font-size: 18px !important; }
-    #timer-display { width: 1.75rem !important; font-size: 10px !important; }
-    #btn-pro { font-size: 9px !important; padding: 0.1rem 0.35rem !important; }
+    #btn-pro { font-size: 9px !important; padding: 0.1rem 0.3rem !important; }
   }
 
-  /* Tile font: scale down on small grids (narrow screens) */
-  @media (max-width: 340px) {
-    .font-display-tile { font-size: 24px !important; }
-  }
-
-  /* Prevent horizontal overflow on all screen sizes */
+  /* Prevent horizontal overflow */
   body { overflow-x: hidden; }
   main { overflow-x: hidden; }
+
+  /* ── Ads: small banner at bottom, never blocks game ── */
+  #ad-wrapper {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    max-height: 60px;
+    overflow: hidden;
+    z-index: 10;
+    background: #0a0a0a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  #ad-wrapper * {
+    max-height: 60px !important;
+    font-size: 11px !important;
+  }
+  /* Push keyboard up so ad doesn't overlap */
+  body:has(#ad-wrapper) main {
+    padding-bottom: 64px !important;
+  }
 
   /* iPhone notch / home bar safe area */
   header { padding-left: env(safe-area-inset-left); padding-right: env(safe-area-inset-right); }
@@ -2387,9 +2390,12 @@ $("btn-multi-quit").addEventListener("click",()=>{
 </script>
 <script>
   if(localStorage.getItem("wordvo-pro")!=="1"){
+    var adWrap=document.createElement("div");
+    adWrap.id="ad-wrapper";
+    document.body.appendChild(adWrap);
     var s=document.createElement("script");
     s.src="https://pl29276185.profitablecpmratenetwork.com/57/d7/2b/57d72bc5e24372dfc589e78cd125aa3d.js";
-    document.body.appendChild(s);
+    adWrap.appendChild(s);
   }
 </script>
 </body>
