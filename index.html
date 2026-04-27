@@ -431,6 +431,7 @@
       <button id="btn-settings" class="text-zinc-400 hover:text-zinc-50 transition-colors active:scale-90">
         <span class="material-symbols-outlined">settings</span>
       </button>
+      <button id="btn-pro" class="text-[10px] font-black tracking-wider px-2 py-0.5 rounded border transition-colors active:scale-90" style="border-color:#f59e0b;color:#f59e0b;">⚡PRO</button>
     </div>
   </div>
 </header>
@@ -671,6 +672,43 @@
       <button id="btn-about" class="text-xs text-zinc-600 hover:text-zinc-400 uppercase tracking-wider">About</button>
       <span class="text-zinc-700 text-xs">·</span>
       <button id="btn-privacy" class="text-xs text-zinc-600 hover:text-zinc-400 uppercase tracking-wider">Privacy Policy</button>
+    </div>
+  </div>
+</div>
+
+<!-- ─── Pro Modal ─────────────────────────────────────────────────────────── -->
+<div id="modal-pro" class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 hidden">
+  <div class="modal-bg bg-surface-container-low border border-outline-variant w-full max-w-[380px] p-7 relative rounded max-h-[90vh] overflow-y-auto">
+    <button class="modal-close absolute top-4 right-4 text-zinc-400 hover:text-white"><span class="material-symbols-outlined">close</span></button>
+
+    <!-- Unlocked state -->
+    <div id="pro-unlocked" class="hidden text-center py-4">
+      <div class="text-4xl mb-3">🎉</div>
+      <h2 class="font-headline-sm text-headline-sm uppercase tracking-widest mb-2">You're Pro!</h2>
+      <p class="text-xs text-zinc-400">All Wordvo Pro features are active. Thank you for your support!</p>
+    </div>
+
+    <!-- Purchase state -->
+    <div id="pro-purchase">
+      <div class="text-center mb-5">
+        <div class="text-3xl mb-2">⚡</div>
+        <h2 class="font-headline-sm text-headline-sm uppercase tracking-widest">Wordvo Pro</h2>
+        <p class="text-xs text-zinc-500 mt-1">One-time purchase · No subscription</p>
+      </div>
+
+      <ul class="space-y-2 mb-6">
+        <li class="flex items-center gap-2 text-sm text-zinc-300"><span class="text-green-400">✓</span> Unlimited hints every game</li>
+        <li class="flex items-center gap-2 text-sm text-zinc-300"><span class="text-green-400">✓</span> No ads (when we add them)</li>
+        <li class="flex items-center gap-2 text-sm text-zinc-300"><span class="text-green-400">✓</span> Support independent development</li>
+        <li class="flex items-center gap-2 text-sm text-zinc-300"><span class="text-green-400">✓</span> Pro badge in game</li>
+      </ul>
+
+      <a href="https://www.paypal.com/ncp/payment/E2W59V4A5BGZC" target="_blank"
+        class="block w-full text-center py-3 rounded font-black text-sm uppercase tracking-wider transition-colors"
+        style="background:#f59e0b;color:#000;">
+        ⚡ Get Pro — $1.99
+      </a>
+      <p class="text-center text-[10px] text-zinc-600 mt-3">Secure payment via PayPal · Instant unlock after payment</p>
     </div>
   </div>
 </div>
@@ -1165,6 +1203,19 @@ const $ = id => document.getElementById(id);
 
 let answer="", guesses=[], current="", gameOver=false;
 let hardMode=false, wotdMode=false, hintsUsed=0, maxHints=2;
+let isPro=localStorage.getItem("wordvo-pro")==="1";
+if(isPro) maxHints=999;
+
+// Check PayPal return URL
+(function(){
+  const p=new URLSearchParams(location.search);
+  if(p.get("pro")==="unlocked"){
+    localStorage.setItem("wordvo-pro","1");
+    isPro=true; maxHints=999;
+    history.replaceState({},"",location.pathname);
+    setTimeout(()=>showToast("🎉 Wordvo Pro unlocked! Enjoy unlimited hints!"),600);
+  }
+})();
 let timerInterval=null, timerSeconds=0, timerActive=false;
 
 let stats = JSON.parse(localStorage.getItem("wordvo-stats-v2")||
@@ -1808,6 +1859,21 @@ $("btn-share").addEventListener("click",()=>{
 // ════════════════════════════════════════════════════════════════════════
 function openAbout(){ $("modal-about").classList.remove("hidden"); }
 function openPrivacy(){ $("modal-privacy").classList.remove("hidden"); }
+
+// PRO MODAL
+function openPro(){
+  $("modal-pro").classList.remove("hidden");
+  if(isPro){
+    $("pro-unlocked").classList.remove("hidden");
+    $("pro-purchase").classList.add("hidden");
+  } else {
+    $("pro-unlocked").classList.add("hidden");
+    $("pro-purchase").classList.remove("hidden");
+  }
+}
+$("btn-pro").addEventListener("click", openPro);
+// Update Pro button if already unlocked
+if(isPro){ $("btn-pro").textContent="⚡ PRO ✓"; $("btn-pro").style.color="#4ade80"; $("btn-pro").style.borderColor="#4ade80"; }
 ["btn-about","footer-about"].forEach(function(id){ var el=document.getElementById(id); if(el) el.addEventListener("click",openAbout); });
 ["btn-privacy","footer-privacy"].forEach(function(id){ var el=document.getElementById(id); if(el) el.addEventListener("click",openPrivacy); });
 
