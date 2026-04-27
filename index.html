@@ -319,117 +319,102 @@
   .arc-dot.none { background:#353434; }
   .archive-badge { font-size:10px; background:#172554; color:#93c5fd; border-radius:4px; padding:1px 5px; font-weight:700; letter-spacing:0.05em; }
 
-  /* ── Mobile Responsive Layout ─────────────────────────────────────────── */
+  /* ═══════════════════════════════════════════════════════════════
+     MOBILE LAYOUT — single source of truth, no scroll, no cut-off
+     Header: 52px | Toast: 32px | Buttons: 76px | KB: 148px | Gaps: 24px | Ad: 60px
+     Available for grid = 100dvh - 392px
+     Grid width = available_height * (5cols/6rows) capped at 310px
+  ════════════════════════════════════════════════════════════════ */
 
-  /* Grid + related elements: max 310px wide */
+  /* Prevent any horizontal scroll */
+  body, main { overflow-x: hidden; }
+
+  /* Safe area padding */
+  header { padding-left: env(safe-area-inset-left); padding-right: env(safe-area-inset-right); }
+
+  /* Grid & related widths */
   #grid,
   #speed-bar-wrap, #player-indicator, #def-box {
-    width: min(calc(100vw - 32px), 310px);
+    width: min(calc(100vw - 32px), min(calc((100dvh - 392px) * 5 / 6), 310px));
     max-width: 310px;
   }
 
-  /* Keyboard keys: always readable */
+  /* Keyboard: large readable font, good tap target */
   .key-base {
-    font-size: 16px !important;
+    font-size: 17px !important;
     font-weight: 800 !important;
-    height: 3.2rem !important;
+    height: 3rem !important;
+    min-width: 28px !important;
   }
 
-  /* ── All phones (height ≤ 900px) ── */
-  @media (max-height: 900px) {
-    /* Grid shrinks so top row never cuts off:
-       available = dvh - header(52) - toast(36) - buttons(80) - keyboard(150) - gaps(40) */
+  /* Main: tight padding, ad space at bottom */
+  main {
+    padding-top: 0.25rem !important;
+    padding-left: max(0.75rem, env(safe-area-inset-left)) !important;
+    padding-right: max(0.75rem, env(safe-area-inset-right)) !important;
+    padding-bottom: max(68px, calc(60px + env(safe-area-inset-bottom))) !important;
+    gap: 0 !important;
+  }
+
+  /* Header compact */
+  header > div { height: 52px !important; }
+  header h1 { font-size: 1.25rem !important; letter-spacing: 0.15em !important; }
+  header > div > div:last-child { gap: 0.3rem !important; }
+  header > div > div:last-child .material-symbols-outlined { font-size: 22px !important; }
+
+  /* Toast row compact */
+  .mb-1.h-9 { height: 1.75rem !important; margin-bottom: 0.1rem !important; }
+
+  /* Grid margin */
+  #grid { margin-bottom: 0.4rem !important; }
+
+  /* Button rows compact */
+  #btn-new-game {
+    font-size: 14px !important;
+    padding: 0.45rem 1rem !important;
+  }
+  #btn-archive, #btn-speed, #btn-multi {
+    font-size: 13px !important;
+    padding: 0.35rem 0.7rem !important;
+  }
+  .flex.gap-2.mb-1\.5 { margin-bottom: 0.35rem !important; gap: 0.35rem !important; }
+  .flex.gap-2.mb-2    { margin-bottom: 0.35rem !important; gap: 0.35rem !important; }
+
+  /* Very short screens (SE, older Androids) */
+  @media (max-height: 680px) {
     #grid {
-      width: min(
-        calc(100vw - 32px),
-        min(calc((100dvh - 358px) * 5 / 6), 310px)
-      ) !important;
+      width: min(calc(100vw - 32px), min(calc((100dvh - 360px) * 5 / 6), 270px)) !important;
     }
-    main { padding-top: 0.25rem !important; gap: 0 !important; }
-    .mb-1.h-9 { height: 1.75rem !important; margin-bottom: 0.25rem !important; }
-    #grid { margin-bottom: 0.5rem !important; }
-    .key-base { height: 3rem !important; font-size: 16px !important; }
+    .key-base { height: 2.6rem !important; font-size: 15px !important; }
+    #btn-new-game { font-size: 12px !important; }
+    #btn-archive, #btn-speed, #btn-multi { font-size: 11px !important; }
   }
 
-  @media (max-height: 750px) {
-    #grid {
-      width: min(
-        calc(100vw - 32px),
-        min(calc((100dvh - 330px) * 5 / 6), 270px)
-      ) !important;
-    }
-    .key-base { height: 2.7rem !important; font-size: 15px !important; }
-    /* Compact button rows */
-    #btn-new-game { padding: 0.4rem 0.75rem !important; font-size: 12px !important; }
-    .flex.gap-2.mb-2 button { padding: 0.35rem 0.6rem !important; font-size: 11px !important; }
-  }
-
-  @media (max-height: 640px) {
-    #grid {
-      width: min(
-        calc(100vw - 32px),
-        min(calc((100dvh - 300px) * 5 / 6), 240px)
-      ) !important;
-    }
-    .key-base { height: 2.4rem !important; font-size: 14px !important; }
-  }
-
-  /* Narrow phones — header icons */
-  @media (max-width: 430px) {
-    header > div { height: 52px !important; }
-    header > div > div:last-child { gap: 0.3rem !important; }
-    header > div > div:last-child .material-symbols-outlined { font-size: 22px !important; }
-    header h1 { font-size: 1.2rem !important; }
-  }
+  /* Narrow phones (< 380px wide) */
   @media (max-width: 380px) {
-    header > div > div:last-child { gap: 0.2rem !important; }
+    header > div > div:last-child { gap: 0.18rem !important; }
     header > div > div:last-child .material-symbols-outlined { font-size: 20px !important; }
-  }
-  @media (max-width: 340px) {
-    header > div > div:last-child { gap: 0.12rem !important; }
-    header > div > div:last-child .material-symbols-outlined { font-size: 18px !important; }
     #btn-pro { font-size: 9px !important; padding: 0.1rem 0.3rem !important; }
+    #header-install-btn { font-size: 9px !important; padding: 0.1rem 0.3rem !important; }
   }
 
-  /* Prevent horizontal overflow */
-  body { overflow-x: hidden; }
-  main { overflow-x: hidden; }
+  /* Modals scrollable */
+  [id^="modal"] > div { max-height: 90dvh; overflow-y: auto; }
 
-  /* ── Button text size 20px ── */
-  #btn-new-game { font-size: 20px !important; }
-  #btn-archive, #btn-speed, #btn-multi { font-size: 20px !important; }
-
-  /* ── Ads: small banner at bottom, never blocks game ── */
+  /* ── Ad banner: fixed bottom strip, never overlaps game ── */
   #ad-wrapper {
     position: fixed;
     bottom: 0;
     left: 0;
     width: 100%;
-    max-height: 70px;
-    min-height: 50px;
+    height: 60px;
     overflow: hidden;
     z-index: 40;
-    background: #111;
+    background: #0d0d0d;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-top: 1px solid #333;
-  }
-  #ad-wrapper > * {
-    max-width: 100% !important;
-    max-height: 70px !important;
-  }
-  /* Push content up so ad doesn't overlap keyboard */
-  main { padding-bottom: max(74px, env(safe-area-inset-bottom)) !important; }
-
-  /* iPhone notch / home bar safe area */
-  header { padding-left: env(safe-area-inset-left); padding-right: env(safe-area-inset-right); }
-  main   { padding-left: max(1rem, env(safe-area-inset-left)); padding-right: max(1rem, env(safe-area-inset-right)); padding-bottom: max(0.75rem, env(safe-area-inset-bottom)); }
-
-  /* Modals: full-width on tiny screens, scrollable if content is taller than viewport */
-  [id^="modal"] > div {
-    max-height: 90dvh;
-    overflow-y: auto;
+    border-top: 1px solid #2a2a2a;
   }
 </style>
 </head>
