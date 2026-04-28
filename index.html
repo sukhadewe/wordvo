@@ -95,20 +95,20 @@
     theme: {
       extend: {
         colors: {
-          "background": "#141313","surface-variant": "#353434","surface-container-high": "#2a2a2a",
-          "surface-container-highest": "#353434","surface-container-low": "#1c1b1b",
-          "surface-container": "#201f1f","outline-variant": "#444748","outline": "#8e9192",
-          "on-background": "#e5e2e1","on-surface": "#e5e2e1","on-surface-variant": "#c4c7c8",
-          "secondary-container": "#155519","secondary-fixed": "#aff4a6","secondary-fixed-dim": "#94d78c",
-          "on-secondary": "#003908","on-secondary-container": "#87c87f","secondary": "#94d78c",
-          "primary": "#ffffff","error-container": "#93000a","on-error": "#690005"
+          "background": "#0a0a0a","surface-variant": "#1f1f1f","surface-container-high": "#262626",
+          "surface-container-highest": "#2e2e2e","surface-container-low": "#141414",
+          "surface-container": "#1a1a1a","outline-variant": "#3f3f3f","outline": "#737373",
+          "on-background": "#fafafa","on-surface": "#fafafa","on-surface-variant": "#a3a3a3",
+          "secondary-container": "#064e3b","secondary-fixed": "#34d399","secondary-fixed-dim": "#10b981",
+          "on-secondary": "#ecfdf5","on-secondary-container": "#6ee7b7","secondary": "#10b981",
+          "primary": "#ffffff","error-container": "#7f1d1d","on-error": "#fef2f2"
         },
-        spacing: { "grid-gap":"5px","keyboard-gap":"6px","section-margin":"2rem","touch-target-min":"44px" },
+        spacing: { "grid-gap":"6px","keyboard-gap":"8px","section-margin":"2rem","touch-target-min":"48px" },
         fontFamily: { "display-tile":["Inter"],"key-label":["Inter"],"headline-sm":["Inter"] },
         fontSize: {
-          "display-tile": ["32px",{"lineHeight":"100%","fontWeight":"700"}],
-          "key-label": ["14px",{"lineHeight":"18px","fontWeight":"600"}],
-          "headline-sm": ["24px",{"lineHeight":"32px","letterSpacing":"0.05em","fontWeight":"700"}]
+          "display-tile": ["36px",{"lineHeight":"100%","fontWeight":"800"}],
+          "key-label": ["15px",{"lineHeight":"20px","fontWeight":"700"}],
+          "headline-sm": ["28px",{"lineHeight":"36px","letterSpacing":"0.02em","fontWeight":"800"}]
         }
       }
     }
@@ -116,8 +116,38 @@
 </script>
 <style>
   .material-symbols-outlined { font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24; }
-  body { min-height: 100dvh; transition: background 0.3s, color 0.3s; touch-action: manipulation; }
-  button, .key-base, [role="button"] { touch-action: manipulation; }
+  body { 
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    transition: background 0.5s cubic-bezier(0.4, 0, 0.2, 1), color 0.3s; 
+    touch-action: manipulation;
+    background: radial-gradient(circle at 50% 0%, #1a1a1a 0%, #0a0a0a 100%);
+    position: relative;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: 
+      radial-gradient(circle at 20% 30%, rgba(16, 185, 129, 0.05) 0%, transparent 50%),
+      radial-gradient(circle at 80% 70%, rgba(99, 102, 241, 0.05) 0%, transparent 50%);
+    z-index: -1;
+    pointer-events: none;
+  }
+  header {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    background: rgba(10, 10, 10, 0.8) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+  }
+  button, .key-base, [role="button"] { 
+    touch-action: manipulation; 
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  button:active { transform: scale(0.95); }
   * { -webkit-tap-highlight-color: transparent; }
 
   /* Light mode overrides — use !important to beat Tailwind CDN injected styles */
@@ -211,9 +241,6 @@
   @keyframes fadeIn  { from{opacity:0;transform:translateY(-16px)} to{opacity:1;transform:translateY(0)} }
   .bar-animate { transition: width 0.6s ease; }
 
-  /* Intro overlay */
-  #intro { animation: fadeIn 0.5s ease forwards; }
-
   /* Confetti canvas */
   #confetti-canvas { position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:200; }
 
@@ -240,19 +267,84 @@
   .hint-glow { box-shadow:0 0 0 3px #f5c542; animation:hintGlow 1s ease; }
   @keyframes hintGlow { 0%,100%{box-shadow:0 0 0 0 #f5c542} 50%{box-shadow:0 0 0 6px #f5c54288} }
 
-  /* Toggle switch */
-  .toggle { position:relative; display:inline-block; width:42px; height:24px; }
+  /* ── Toggle Switch ────────────────────────────────────────────────── */
+  .toggle { position:relative; display:inline-block; width:44px; height:24px; }
   .toggle input { opacity:0; width:0; height:0; }
-  .slider { position:absolute; cursor:pointer; inset:0; background:#444; border-radius:24px; transition:.3s; }
-  .slider:before { position:absolute; content:""; height:18px; width:18px; left:3px; bottom:3px; background:white; border-radius:50%; transition:.3s; }
-  input:checked + .slider { background:#155519; }
-  input:checked + .slider:before { transform:translateX(18px); }
+  .slider { position:absolute; cursor:pointer; inset:0; background:rgba(255,255,255,0.1); border-radius:24px; transition:.3s; }
+  .slider:before { position:absolute; content:""; height:18px; width:18px; left:3px; bottom:3px; background:white; border-radius:50%; transition:.3s; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+  input:checked + .slider { background:#10b981; }
+  input:checked + .slider:before { transform:translateX(20px); }
 
-  /* Definition box */
-  #def-box { border-left: 3px solid #155519; }
+  /* ── Definition Box ───────────────────────────────────────────────── */
+  #def-box { 
+    border-left: 4px solid #10b981; 
+    background: rgba(16, 185, 129, 0.05);
+    backdrop-filter: blur(4px);
+  }
 
-  /* PWA install button */
-  #btn-install { display:none; }
+  /* ── Premium Keyboard ────────────────────────────────────────────── */
+  .key-base {
+    border-radius: 8px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase;
+    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 3px 0 rgba(0,0,0,0.3);
+    border: 1px solid rgba(255,255,255,0.05) !important;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .key-base:active {
+    transform: translateY(2px);
+    box-shadow: 0 1px 0 rgba(0,0,0,0.3);
+  }
+  
+  /* ── Premium Buttons ─────────────────────────────────────────────── */
+  .btn-premium {
+    border-radius: 999px !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.025em;
+    text-transform: uppercase;
+    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+  .btn-premium:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+  }
+  .btn-premium:active {
+    transform: translateY(1px) scale(0.98);
+  }
+
+  /* ── PRO Badge ───────────────────────────────────────────────────── */
+  #btn-pro {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    color: #fff !important;
+    border: none !important;
+    box-shadow: 0 0 15px rgba(245, 158, 11, 0.3);
+    position: relative;
+    overflow: hidden;
+  }
+  #btn-pro::after {
+    content: "";
+    position: absolute;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.3) 50%, transparent 55%);
+    animation: shimmer 3s infinite;
+  }
+  @keyframes shimmer {
+    0%   { transform: translateX(-100%) translateY(-100%); }
+    100% { transform: translateX(100%) translateY(100%); }
+  }
+
+  /* ── Modals ──────────────────────────────────────────────────────── */
+  [id^="modal"] > div {
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    background: rgba(26, 26, 26, 0.8) !important;
+    border: 1px solid rgba(255,255,255,0.1) !important;
+    border-radius: 24px !important;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !important;
+  }
 
   /* Custom word badge */
   .custom-badge { font-size:10px; background:#1a1a4e; color:#818cf8; border-radius:4px; padding:1px 5px; font-weight:700; letter-spacing:0.05em; }
@@ -277,7 +369,13 @@
   .ach-card.unlocked .ach-desc { color:#6b7280; }
 
   /* Tutorial overlay */
-  #tutorial-overlay { backdrop-filter: blur(2px); }
+  #tutorial-overlay { 
+    backdrop-filter: blur(8px);
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  #tutorial-overlay.hidden { 
+    opacity: 0; visibility: hidden; pointer-events: none; display: flex !important;
+  }
   .tut-step { display:none; animation: fadeIn 0.35s ease forwards; }
   .tut-step.active { display:flex; }
   .tut-tile { width:44px; height:44px; border-radius:6px; border:2px solid #444; display:flex; align-items:center; justify-content:center; font-size:20px; font-weight:900; color:white; transition: background 0.4s, border-color 0.4s; }
@@ -320,94 +418,204 @@
   .archive-badge { font-size:10px; background:#172554; color:#93c5fd; border-radius:4px; padding:1px 5px; font-weight:700; letter-spacing:0.05em; }
 
   /* ═══════════════════════════════════════════════════════════════
-     MOBILE LAYOUT — single source of truth, no scroll, no cut-off
-     Header: 52px | Toast: 32px | Buttons: 76px | KB: 148px | Gaps: 24px | Ad: 60px
-     Available for grid = 100dvh - 392px
-     Grid width = available_height * (5cols/6rows) capped at 310px
+     FULLY RESPONSIVE LAYOUT — Mobile-first, adaptive design.
+     Breakpoints: 320-480 | 481-767 | 768-1024 | 1025-1440 | 1441+
+     Uses clamp(), fluid units, safe-area, container queries.
   ════════════════════════════════════════════════════════════════ */
 
-  /* Prevent any horizontal scroll */
-  body, main { overflow-x: hidden; }
-
-  /* Safe area padding */
-  header { padding-left: env(safe-area-inset-left); padding-right: env(safe-area-inset-right); }
-
-  /* Grid & related widths */
-  #grid,
-  #speed-bar-wrap, #player-indicator, #def-box {
-    width: min(calc(100vw - 32px), min(calc((100dvh - 392px) * 5 / 6), 310px));
-    max-width: 310px;
+  /* ── Global Reset & Overflow Guard ──────────────────────────── */
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body {
+    overflow-x: hidden;
+    overflow-y: auto;
+    width: 100%;
+    max-width: 100vw;
+    -webkit-text-size-adjust: 100%;
+    word-break: break-word;
+    overflow-wrap: anywhere;
   }
 
-  /* Keyboard: large readable font, good tap target */
-  .key-base {
-    font-size: 17px !important;
-    font-weight: 800 !important;
-    height: 3rem !important;
-    min-width: 28px !important;
-  }
+  /* Hide footer — About/Privacy accessible via modals */
+  footer { display: none !important; }
 
-  /* Main: tight padding, ad space at bottom */
+  /* ── Safe Area Insets (iPhone notch/Dynamic Island) ─────────── */
+  header {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+    padding-top: env(safe-area-inset-top);
+  }
   main {
-    padding-top: 0.25rem !important;
-    padding-left: max(0.75rem, env(safe-area-inset-left)) !important;
-    padding-right: max(0.75rem, env(safe-area-inset-right)) !important;
-    padding-bottom: max(68px, calc(60px + env(safe-area-inset-bottom))) !important;
+    flex: 1 1 0 !important;
+    min-height: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    padding-left: max(0.5rem, env(safe-area-inset-left)) !important;
+    padding-right: max(0.5rem, env(safe-area-inset-right)) !important;
+    padding-bottom: calc(244px + env(safe-area-inset-bottom)) !important;
+    padding-top: 2px !important;
     gap: 0 !important;
   }
+  /* Top section (grid + buttons) fills remaining space above keyboard */
+  main > div:first-child {
+    flex: 1 1 0 !important;
+    min-height: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+  /* Keyboard wrapper: fixed height, never shrink */
+  main > div:last-child {
+    flex: 0 0 auto !important;
+  }
 
-  /* Header compact */
-  header > div { height: 52px !important; }
-  header h1 { font-size: 1.25rem !important; letter-spacing: 0.15em !important; }
-  header > div > div:last-child { gap: 0.3rem !important; }
-  header > div > div:last-child .material-symbols-outlined { font-size: 22px !important; }
+  /* ── Header — fluid across all sizes ───────────────────────── */
+  header > div {
+    height: clamp(44px, 7vh, 64px) !important;
+    max-width: min(100%, 800px);
+    padding-left: clamp(0.5rem, 2vw, 1.5rem) !important;
+    padding-right: clamp(0.5rem, 2vw, 1.5rem) !important;
+  }
+  header h1 {
+    font-size: clamp(1rem, 3.5vw, 1.6rem) !important;
+    letter-spacing: clamp(0.08em, 1vw, 0.15em) !important;
+  }
+  header > div > div:last-child {
+    gap: clamp(0.15rem, 1vw, 0.5rem) !important;
+  }
+  header > div > div:last-child .material-symbols-outlined {
+    font-size: clamp(18px, 4vw, 24px) !important;
+  }
+  #btn-pro {
+    font-size: clamp(8px, 1.8vw, 11px) !important;
+    padding: clamp(0.1rem, 0.5vw, 0.3rem) clamp(0.25rem, 1vw, 0.75rem) !important;
+    white-space: nowrap;
+  }
+  #header-install-btn {
+    font-size: clamp(8px, 1.8vw, 11px) !important;
+    padding: clamp(0.1rem, 0.5vw, 0.3rem) clamp(0.25rem, 1vw, 0.75rem) !important;
+    white-space: nowrap;
+  }
 
-  /* Toast row compact */
-  .mb-1.h-9 { height: 1.75rem !important; margin-bottom: 0.1rem !important; }
+  /* ── Top section flex ──────────────────────────────────────── */
+  .flex.flex-col.items-center.w-full.flex-1.min-h-0 {
+    min-height: 0 !important;
+  }
 
-  /* Grid margin */
-  #grid { margin-bottom: 0.4rem !important; }
+  /* ── Toast — compact ───────────────────────────────────────── */
+  .mb-1.h-9 { height: clamp(1.2rem, 3vh, 2.25rem) !important; margin-bottom: 2px !important; flex-shrink: 0; }
+  #toast-msg { font-size: clamp(11px, 2.5vw, 14px) !important; }
 
-  /* Button rows compact */
+  /* ── Grid — height-aware, fits viewport ─────────────────── */
+  #grid {
+    width: min(calc((100dvh - 350px) / 6 * 5 + 24px), 90vw, 340px) !important;
+    max-width: 100%;
+    margin-bottom: clamp(2px, 0.5vh, 8px) !important;
+    margin-left: auto; margin-right: auto;
+    /* Make grid auto-fit vertically */
+    grid-template-rows: repeat(6, 1fr);
+    /* CSS-only height constraint: 100dvh - header(48) - keyboard(170) - buttons+margins(130) */
+    height: calc(100dvh - 350px);
+    max-height: calc(100dvh - 350px);
+  }
+  /* Tiles: sizing is handled by resizeGrid() JS function */
+  #grid > div {
+    font-size: clamp(14px, 5.5vw, 34px) !important;
+    border-radius: clamp(4px, 1vw, 8px);
+  }
+
+  /* Speed bar / player indicator / def box */
+  #speed-bar-wrap, #player-indicator, #def-box {
+    width: min(90vw, 340px);
+    max-width: 100%;
+  }
+  #def-box { font-size: clamp(11px, 2.5vw, 14px) !important; }
+
+  /* ── Keyboard (WhatsApp Style) ───────────────────────── */
+  .kb-key {
+    background-color: #6b7280 !important; /* WhatsApp-like dark mode gray */
+    color: #ffffff !important;
+    border-radius: 8px !important;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.4), 0 1px 2px rgba(0,0,0,0.2) !important;
+    transition: all 0.1s ease;
+    min-height: 44px;
+    height: clamp(2.6rem, 6.5vh, 3.8rem);
+    font-size: clamp(14px, 3.8vw, 20px);
+    font-weight: 600;
+  }
+  body.light .kb-key {
+    background-color: #d1d5db !important; /* WhatsApp light mode gray */
+    color: #111827 !important;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2), 0 1px 2px rgba(0,0,0,0.1) !important;
+  }
+  .kb-key:active {
+    transform: scale(0.92);
+    box-shadow: 0 0 0 rgba(0,0,0,0) !important;
+  }
+  .kb-key.wide {
+    font-size: clamp(12px, 3vw, 16px);
+  }
+
+  /* ── Buttons — fluid, touch-friendly ───────────────────────── */
   #btn-new-game {
-    font-size: 14px !important;
-    padding: 0.45rem 1rem !important;
+    font-size: clamp(11px, 2.5vw, 14px) !important;
+    padding: clamp(0.3rem, 1vh, 0.6rem) clamp(0.6rem, 2vw, 1.2rem) !important;
+    min-height: 44px;
+  }
+  #btn-wotd, #btn-custom-open, #btn-practice {
+    min-height: 44px;
+    min-width: 44px;
   }
   #btn-archive, #btn-speed, #btn-multi {
-    font-size: 13px !important;
-    padding: 0.35rem 0.7rem !important;
+    font-size: clamp(10px, 2.2vw, 13px) !important;
+    padding: clamp(0.25rem, 0.8vh, 0.45rem) clamp(0.4rem, 1.5vw, 0.8rem) !important;
+    min-height: 40px;
   }
-  .flex.gap-2.mb-1\.5 { margin-bottom: 0.35rem !important; gap: 0.35rem !important; }
-  .flex.gap-2.mb-2    { margin-bottom: 0.35rem !important; gap: 0.35rem !important; }
-
-  /* Very short screens (SE, older Androids) */
-  @media (max-height: 680px) {
-    #grid {
-      width: min(calc(100vw - 32px), min(calc((100dvh - 360px) * 5 / 6), 270px)) !important;
-    }
-    .key-base { height: 2.6rem !important; font-size: 15px !important; }
-    #btn-new-game { font-size: 12px !important; }
-    #btn-archive, #btn-speed, #btn-multi { font-size: 11px !important; }
+  .flex.gap-2\.5.mb-2,
+  .flex.gap-2\.5.mb-3 {
+    gap: clamp(0.3rem, 1vw, 0.625rem) !important;
+    flex-wrap: wrap;
+    justify-content: center;
   }
 
-  /* Narrow phones (< 380px wide) */
-  @media (max-width: 380px) {
-    header > div > div:last-child { gap: 0.18rem !important; }
-    header > div > div:last-child .material-symbols-outlined { font-size: 20px !important; }
-    #btn-pro { font-size: 9px !important; padding: 0.1rem 0.3rem !important; }
-    #header-install-btn { font-size: 9px !important; padding: 0.1rem 0.3rem !important; }
+  /* ── Keyboard — fluid, touch targets ───────────────────────── */
+  .key-base {
+    font-size: clamp(13px, 3.5vw, 18px) !important;
+    font-weight: 800 !important;
+    height: clamp(2.4rem, 6vh, 3.5rem) !important;
+    min-width: clamp(22px, 6vw, 44px) !important;
+    min-height: 36px;
+    border-radius: clamp(4px, 1vw, 8px) !important;
+  }
+  .w-full.space-y-1\.5.select-none.pb-1 {
+    flex-shrink: 0;
+    padding-bottom: env(safe-area-inset-bottom, 4px);
+  }
+  [id^="kb-row"] {
+    gap: clamp(3px, 0.8vw, 8px) !important;
+    padding-left: clamp(0px, 0.5vw, 8px);
+    padding-right: clamp(0px, 0.5vw, 8px);
   }
 
-  /* Modals scrollable */
-  [id^="modal"] > div { max-height: 90dvh; overflow-y: auto; }
+  /* ── Modals — responsive, scrollable ───────────────────────── */
+  [id^="modal"] > div {
+    max-height: 90dvh;
+    overflow-y: auto;
+    max-width: min(95vw, 420px);
+    padding: clamp(1rem, 3vw, 2rem) !important;
+  }
+  [id^="modal"] h2 {
+    font-size: clamp(1rem, 3.5vw, 1.75rem) !important;
+  }
 
-  /* ── Ad banner: fixed bottom strip, never overlaps game ── */
+  /* ── Ad Banner ─────────────────────────────────────────────── */
   #ad-wrapper {
     position: fixed;
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 60px;
+    height: clamp(50px, 8vh, 70px);
     overflow: hidden;
     z-index: 40;
     background: #0d0d0d;
@@ -415,91 +623,325 @@
     align-items: center;
     justify-content: center;
     border-top: 1px solid #2a2a2a;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  /* ── Images / Canvas / Icons — never overflow ──────────────── */
+  img, svg, canvas, video {
+    max-width: 100%;
+    height: auto;
+  }
+  #confetti-canvas {
+    object-fit: contain;
+  }
+
+  /* ═══ BREAKPOINT: Small Mobile (320px - 480px) ═════════════ */
+  @media (max-width: 480px) {
+    header > div > div:last-child { gap: 0.15rem !important; }
+    header > div > div:last-child .material-symbols-outlined { font-size: 19px !important; }
+    #timer-display { font-size: 11px !important; width: 2.5rem !important; }
+    #grid { width: min(92vw, 300px) !important; }
+    .btn-premium { border-radius: 999px !important; }
+  }
+
+  /* ═══ BREAKPOINT: Large Mobile (481px - 767px) ═════════════ */
+  @media (min-width: 481px) and (max-width: 767px) {
+    #grid { width: min(80vw, 340px) !important; }
+    header > div { max-width: 600px; }
+    main { max-width: 600px !important; }
+  }
+
+  /* ═══ BREAKPOINT: Tablet/iPad (768px - 1024px) ═════════════ */
+  @media (min-width: 768px) {
+    header > div { max-width: 700px; }
+    main { max-width: 700px !important; }
+    #grid {
+      width: min(50vw, 380px) !important;
+    }
+    #grid > div {
+      font-size: clamp(20px, 3vw, 34px) !important;
+    }
+    .key-base {
+      height: 3.2rem !important;
+      font-size: 17px !important;
+      min-width: 36px !important;
+    }
+    [id^="modal"] > div {
+      max-width: 450px;
+      padding: 2rem !important;
+    }
+    #speed-bar-wrap, #player-indicator, #def-box {
+      width: min(50vw, 380px);
+      max-width: 380px;
+    }
+  }
+
+  /* ═══ BREAKPOINT: Laptop/Desktop (1025px - 1440px) ═════════ */
+  @media (min-width: 1025px) {
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    header > div { max-width: 800px; }
+    main { max-width: 560px !important; }
+    #grid {
+      width: min(35vw, 400px) !important;
+    }
+    .key-base {
+      height: 3.4rem !important;
+      font-size: 18px !important;
+      min-width: 40px !important;
+      cursor: pointer;
+    }
+    .key-base:hover {
+      filter: brightness(1.2);
+    }
+    #speed-bar-wrap, #player-indicator, #def-box {
+      width: min(35vw, 400px);
+      max-width: 400px;
+    }
+  }
+
+  /* ═══ BREAKPOINT: Ultra-wide (1441px+) ═════════════════════ */
+  @media (min-width: 1441px) {
+    main { max-width: 600px !important; }
+    #grid { width: min(25vw, 420px) !important; }
+    [id^="modal"] > div { max-width: 480px; }
+    #speed-bar-wrap, #player-indicator, #def-box {
+      width: min(25vw, 420px);
+      max-width: 420px;
+    }
+  }
+
+  /* ═══ Short Screens (height < 660px) ═══════════════════════ */
+  @media (max-height: 660px) {
+    header > div { height: 40px !important; }
+  }
+
+  /* ═══ Very Short Screens (height < 560px) ══════════════════ */
+  @media (max-height: 560px) {
+    /* Hide secondary buttons row (Archive/Speed/2 Players) */
+    main .flex.flex-wrap.justify-center:nth-of-type(2) { display: none !important; }
+    #grid { margin-bottom: 2px !important; }
+    header > div { height: 36px !important; }
+  }
+  /* ═══ Ultra-Short Screens (height < 480px) ═════════════════ */
+  @media (max-height: 480px) {
+    /* Compact primary buttons */
+    #btn-new-game { font-size: 10px !important; padding: 0.2rem 0.5rem !important; min-height: 36px !important; }
+    #btn-wotd, #btn-custom-open, #btn-practice { min-height: 36px !important; min-width: 36px !important; }
+  }
+
+  /* ═══ Landscape Mode (mobile only) ══════════════════════════ */
+  @media (orientation: landscape) and (max-height: 500px) and (max-width: 900px) {
+    header > div { height: 36px !important; }
+    header h1 { font-size: 0.9rem !important; }
+    main {
+      padding-top: 0 !important;
+      padding-bottom: max(40px, calc(36px + env(safe-area-inset-bottom))) !important;
+    }
+    #grid {
+      width: min(35vh, 220px) !important;
+    }
+    #grid > div {
+      font-size: clamp(10px, 4vh, 20px) !important;
+    }
+    .flex.flex-wrap.justify-center {
+      margin-bottom: 0.1rem !important;
+    }
+    #ad-wrapper { height: 36px; }
+  }
+
+  /* ═══ Splash Screen Responsive ═════════════════════════════ */
+  .splash-tile {
+    width: clamp(40px, 12vw, 65px);
+    height: clamp(40px, 12vw, 65px);
+    font-size: clamp(20px, 6vw, 34px);
+  }
+  .splash-tagline {
+    font-size: clamp(10px, 2.5vw, 14px) !important;
+  }
+  .splash-loader {
+    width: clamp(100px, 40vw, 180px);
+  }
+  .splash-by {
+    font-size: clamp(9px, 2vw, 12px) !important;
+  }
+
+  /* ═══ Splash / Loading Screen ════════════════════════════════════════ */
+  #splash-screen {
+    position: fixed; inset: 0; z-index: 9999;
+    background: #0a0a0a;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  #splash-screen::after {
+    content: "";
+    position: absolute;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(16, 185, 129, 0.15) 0%, transparent 70%);
+    filter: blur(40px);
+    z-index: -1;
+    animation: splashGlow 2s infinite alternate;
+  }
+  @keyframes splashGlow {
+    from { transform: scale(1); opacity: 0.5; }
+    to   { transform: scale(1.2); opacity: 0.8; }
+  }
+  #splash-screen.hide {
+    opacity: 0; transform: scale(1.1); visibility: hidden; pointer-events: none;
+  }
+  .splash-tiles {
+    display: flex; gap: 10px; margin-bottom: 32px;
+  }
+  .splash-tile {
+    width: 60px; height: 60px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Inter', sans-serif; font-size: 32px; font-weight: 900;
+    color: #fff; letter-spacing: 0.02em;
+    opacity: 0; transform: translateY(20px) rotateX(-90deg);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    animation: splashTileIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  }
+  .splash-tile:nth-child(1) { background: linear-gradient(135deg, #065f46, #10b981); animation-delay: 0.1s; }
+  .splash-tile:nth-child(2) { background: linear-gradient(135deg, #92400e, #f59e0b); animation-delay: 0.25s; }
+  .splash-tile:nth-child(3) { background: linear-gradient(135deg, #065f46, #10b981); animation-delay: 0.4s; }
+  .splash-tile:nth-child(4) { background: linear-gradient(135deg, #404040, #737373); animation-delay: 0.55s; }
+  .splash-tile:nth-child(5) { background: linear-gradient(135deg, #065f46, #10b981); animation-delay: 0.7s; }
+  .splash-tile:nth-child(6) { background: linear-gradient(135deg, #92400e, #f59e0b); animation-delay: 0.85s; }
+
+  @keyframes splashTileIn {
+    0%   { opacity: 0; transform: translateY(20px) rotateX(-90deg); }
+    100% { opacity: 1; transform: translateY(0) rotateX(0deg); }
+  }
+
+  .splash-tagline {
+    font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 700;
+    color: #a3a3a3; letter-spacing: 0.3em; text-transform: uppercase;
+    opacity: 0; animation: splashFadeUp 0.4s ease 1.2s forwards;
+  }
+  .splash-loader {
+    width: 160px; height: 4px; background: rgba(255,255,255,0.05);
+    border-radius: 4px; margin-top: 32px; overflow: hidden;
+    opacity: 0; animation: splashFadeUp 0.3s ease 1.3s forwards;
+  }
+  .splash-loader-bar {
+    width: 0%; height: 100%; background: linear-gradient(90deg, #10b981, #34d399);
+    border-radius: 4px; animation: splashLoad 1s ease 1.4s forwards;
+  }
+  @keyframes splashFadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes splashLoad {
+    0%   { width: 0%; }
+    100% { width: 100%; }
+  }
+  .splash-by {
+    position: absolute; bottom: 48px;
+    font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 800;
+    color: #404040; letter-spacing: 0.2em; text-transform: uppercase;
+    opacity: 0; animation: splashFadeUp 0.4s ease 1.5s forwards;
   }
 </style>
 </head>
-<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col items-center">
+<body class="bg-background text-on-background font-body-md">
+
+<!-- ═══ Splash / Loading Screen ═══════════════════════════════════════ -->
+<div id="splash-screen">
+  <div class="splash-tiles">
+    <div class="splash-tile">W</div>
+    <div class="splash-tile">O</div>
+    <div class="splash-tile">R</div>
+    <div class="splash-tile">D</div>
+    <div class="splash-tile">V</div>
+    <div class="splash-tile">O</div>
+  </div>
+  <div class="splash-tagline">Guess the word</div>
+  <div class="splash-loader"><div class="splash-loader-bar"></div></div>
+</div>
+<script>
+  // Auto-dismiss splash after animations complete
+  setTimeout(() => {
+    const splash = document.getElementById('splash-screen');
+    if (splash) {
+      splash.classList.add('hide');
+      // Remove from DOM after transition
+      setTimeout(() => splash.remove(), 800);
+    }
+    // Show tutorial on first visit
+    if (!localStorage.getItem('wordvo-tut-done')) {
+      setTimeout(() => {
+        if (typeof openTutorial === 'function') {
+          openTutorial(true); // pass true for auto-dismiss mode
+        }
+      }, 500);
+    }
+  }, 2500);
+</script>
 
 <!-- Confetti Canvas -->
 <canvas id="confetti-canvas"></canvas>
 <!-- Achievement unlock toast -->
 <div id="ach-toast"></div>
 
-<!-- ─── Intro Screen ──────────────────────────────────────────────────── -->
-<div id="intro" class="fixed inset-0 bg-zinc-950 z-[300] flex flex-col items-center justify-center gap-6">
-  <h1 class="text-6xl font-black tracking-widest text-white uppercase">WORDVO</h1>
-  <p class="text-zinc-400 text-sm tracking-widest uppercase">Guess the 5-letter word</p>
-  <div class="flex gap-2 mt-2">
-    <div class="w-10 h-10 bg-secondary-container rounded flex items-center justify-center font-bold text-white text-lg tile-flip" style="animation-delay:0.1s">W</div>
-    <div class="w-10 h-10 bg-yellow-700 rounded flex items-center justify-center font-bold text-white text-lg tile-flip" style="animation-delay:0.3s">O</div>
-    <div class="w-10 h-10 bg-secondary-container rounded flex items-center justify-center font-bold text-white text-lg tile-flip" style="animation-delay:0.5s">R</div>
-    <div class="w-10 h-10 bg-surface-variant rounded flex items-center justify-center font-bold text-zinc-400 text-lg tile-flip" style="animation-delay:0.7s">D</div>
-    <div class="w-10 h-10 bg-secondary-container rounded flex items-center justify-center font-bold text-white text-lg tile-flip" style="animation-delay:0.9s">V</div>
-  </div>
-  <button id="btn-play-intro" class="mt-4 bg-secondary-container hover:bg-secondary-fixed text-on-secondary px-10 py-3 rounded-full font-bold uppercase tracking-widest text-sm active:scale-95 transition-transform">
-    Play
-  </button>
-  <div id="btn-install" class="mt-2">
-    <button id="btn-install-action" class="bg-zinc-800 hover:bg-zinc-700 text-white px-6 py-2 rounded-full text-xs font-bold uppercase tracking-wider flex items-center gap-2">
-      <span class="material-symbols-outlined text-sm">install_mobile</span> Install App
-    </button>
-  </div>
-</div>
 
 <!-- ─── Top Bar ───────────────────────────────────────────────────────── -->
-<header class="bg-zinc-950 border-b-2 border-zinc-800 w-full sticky top-0 z-50">
-  <div class="flex justify-between items-center w-full px-4 h-16 max-w-[500px] mx-auto">
-    <button id="btn-help" class="text-zinc-400 hover:text-zinc-50 transition-colors active:scale-90">
+<header class="bg-zinc-950 border-b-2 border-zinc-800 w-full sticky top-0 z-50 overflow-hidden">
+  <div class="flex justify-between items-center w-full px-3 sm:px-4 h-12 sm:h-14 lg:h-16 max-w-[800px] mx-auto">
+    <button id="btn-help" class="text-zinc-400 hover:text-zinc-50 transition-colors active:scale-90 flex-shrink-0 min-w-[44px] min-h-[44px] flex items-center justify-center">
       <span class="material-symbols-outlined">help</span>
     </button>
-    <div class="flex flex-col items-center">
-      <h1 class="text-2xl font-black tracking-widest text-zinc-50 uppercase leading-none">WORDVO</h1>
-      <div class="flex gap-1 mt-0.5" id="mode-badges"></div>
+    <div class="flex flex-col items-center min-w-0">
+      <h1 class="font-black tracking-widest text-zinc-50 uppercase leading-none" style="font-size:clamp(0.9rem,3.5vw,1.5rem)">WORDVO</h1>
+      <div class="flex gap-1 mt-0.5 flex-wrap justify-center" id="mode-badges"></div>
     </div>
-    <div class="flex items-center gap-3">
-      <div id="timer-display" class="font-mono text-sm text-zinc-400 w-12 text-right hidden">0:00</div>
-      <button id="btn-hint" title="Hint" class="text-zinc-400 hover:text-yellow-400 transition-colors active:scale-90">
-        <span class="material-symbols-outlined">lightbulb</span>
+    <div class="flex items-center flex-shrink-0" style="gap:clamp(0.15rem,1.5vw,0.75rem)">
+      <div id="timer-display" class="font-mono text-zinc-400 text-right hidden" style="font-size:clamp(10px,2vw,14px);width:clamp(2rem,6vw,3rem)">0:00</div>
+      <button id="btn-hint" title="Hint" class="text-zinc-400 hover:text-yellow-400 transition-colors active:scale-90 min-w-[36px] min-h-[36px] flex items-center justify-center">
+        <span class="material-symbols-outlined" style="font-size:clamp(18px,4vw,24px)">lightbulb</span>
       </button>
-      <button id="btn-ach" title="Achievements" class="text-zinc-400 hover:text-yellow-400 transition-colors active:scale-90 relative">
-        <span class="material-symbols-outlined">emoji_events</span>
+      <button id="btn-ach" title="Achievements" class="text-zinc-400 hover:text-yellow-400 transition-colors active:scale-90 relative min-w-[36px] min-h-[36px] flex items-center justify-center">
+        <span class="material-symbols-outlined" style="font-size:clamp(18px,4vw,24px)">emoji_events</span>
         <span id="ach-badge-dot" class="hidden absolute -top-1 -right-1 w-2 h-2 bg-yellow-400 rounded-full"></span>
       </button>
-      <button id="btn-calendar" title="Streak Calendar" class="text-zinc-400 hover:text-zinc-50 transition-colors active:scale-90">
-        <span class="material-symbols-outlined">calendar_month</span>
+      <button id="btn-calendar" title="Streak Calendar" class="text-zinc-400 hover:text-zinc-50 transition-colors active:scale-90 min-w-[36px] min-h-[36px] flex items-center justify-center">
+        <span class="material-symbols-outlined" style="font-size:clamp(18px,4vw,24px)">calendar_month</span>
       </button>
-      <button id="btn-stats" class="text-zinc-400 hover:text-zinc-50 transition-colors active:scale-90">
-        <span class="material-symbols-outlined">leaderboard</span>
+      <button id="btn-stats" class="text-zinc-400 hover:text-zinc-50 transition-colors active:scale-90 min-w-[36px] min-h-[36px] flex items-center justify-center">
+        <span class="material-symbols-outlined" style="font-size:clamp(18px,4vw,24px)">leaderboard</span>
       </button>
-      <button id="btn-settings" class="text-zinc-400 hover:text-zinc-50 transition-colors active:scale-90">
-        <span class="material-symbols-outlined">settings</span>
+      <button id="btn-settings" class="text-zinc-400 hover:text-zinc-50 transition-colors active:scale-90 min-w-[36px] min-h-[36px] flex items-center justify-center">
+        <span class="material-symbols-outlined" style="font-size:clamp(18px,4vw,24px)">settings</span>
       </button>
-      <button id="header-install-btn" title="Install App" style="display:none;" class="items-center gap-1 text-[10px] font-black tracking-wider px-2 py-0.5 rounded border border-green-500 text-green-400 active:scale-90 transition-colors">
-        <span class="material-symbols-outlined" style="font-size:14px;">install_mobile</span>Install
+      <button id="header-install-btn" title="Install App" style="display:none;font-size:clamp(8px,1.8vw,10px)" class="flex items-center gap-1 font-black tracking-wider px-2 py-1 rounded-full border border-emerald-500/50 text-emerald-400 bg-emerald-500/10 hover:bg-emerald-500/20 active:scale-90 transition-all whitespace-nowrap">
+        <span class="material-symbols-outlined" style="font-size:14px;">install_mobile</span>INSTALL
       </button>
-      <button id="btn-pro" class="text-[10px] font-black tracking-wider px-2 py-0.5 rounded border transition-colors active:scale-90" style="border-color:#f59e0b;color:#f59e0b;">⚡PRO</button>
+      <button id="btn-pro" class="font-black tracking-wider rounded-full btn-premium whitespace-nowrap" style="font-size:clamp(8px,1.8vw,10px);padding:clamp(0.1rem,0.4vw,0.25rem) clamp(0.3rem,1vw,0.75rem)">⚡ PRO</button>
     </div>
   </div>
 </header>
 
 <!-- ─── Main ──────────────────────────────────────────────────────────── -->
-<main class="flex-grow flex flex-col items-center w-full max-w-[500px] px-4 py-3 gap-0">
+<main class="flex-grow flex flex-col items-center w-full px-2 sm:px-4 py-2 gap-0" style="max-width:min(100%,800px)">
 
   <!-- Top section: toast + grid + buttons -->
   <div class="flex flex-col items-center w-full flex-1 min-h-0">
 
     <!-- Toast -->
-    <div class="mb-1 h-9 flex items-center justify-center">
-      <div id="toast-msg" class="hidden bg-primary text-background px-4 py-2 rounded-sm font-bold text-sm tracking-wide shadow-xl"></div>
+    <div class="mb-1 flex items-center justify-center" style="height:clamp(1.2rem,3vh,2.25rem)">
+      <div id="toast-msg" class="hidden bg-primary text-background px-3 py-1.5 rounded-sm font-bold tracking-wide shadow-xl" style="font-size:clamp(11px,2.5vw,14px)"></div>
     </div>
 
     <!-- Speed Mode Bar -->
-    <div id="speed-bar-wrap" class="hidden w-full max-w-[330px] mx-auto mb-2">
-      <div class="flex justify-between items-center text-xs mb-1">
+    <div id="speed-bar-wrap" class="hidden mx-auto mb-2" style="width:min(90vw,340px);max-width:100%">
+      <div class="flex justify-between items-center mb-1" style="font-size:clamp(10px,2.2vw,12px)">
         <span class="font-bold text-orange-400">⚡ SPEED MODE</span>
         <div class="flex items-center gap-3">
           <span class="text-zinc-400">Score: <strong id="speed-score-display" class="text-orange-400">0</strong></span>
-          <span id="speed-timer-text" class="font-mono font-bold text-orange-400 w-8 text-right">60s</span>
+          <span id="speed-timer-text" class="font-mono font-bold text-orange-400 text-right" style="width:clamp(1.5rem,5vw,2rem)">60s</span>
         </div>
       </div>
       <div style="background:#333;border-radius:3px;overflow:hidden;height:6px;">
@@ -508,49 +950,51 @@
     </div>
 
     <!-- Player Indicator (Multiplayer) -->
-    <div id="player-indicator" class="hidden w-full max-w-[330px] mx-auto mb-2 text-center text-sm font-bold py-2 px-4 rounded-lg"></div>
+    <div id="player-indicator" class="hidden mx-auto mb-2 text-center text-sm font-bold py-2 px-4 rounded-lg" style="width:min(90vw,340px);max-width:100%"></div>
 
     <!-- Word Grid -->
-    <div id="grid" class="grid grid-cols-5 gap-grid-gap mb-3 mx-auto" style="width:min(calc(100vw - 32px),330px)"></div>
+    <div id="grid" class="grid grid-cols-5 gap-grid-gap mx-auto" style="width:min(90vw,340px);max-width:100%;margin-bottom:clamp(2px,0.5vh,12px)"></div>
 
     <!-- Definition Box -->
-    <div id="def-box" class="hidden mx-auto mb-2 bg-surface-container p-3 rounded text-sm text-zinc-300 leading-relaxed" style="width:min(calc(100vw - 32px),330px)"></div>
+    <div id="def-box" class="hidden mx-auto mb-2 bg-surface-container p-3 rounded text-zinc-300 leading-relaxed" style="font-size:clamp(11px,2.5vw,14px);width:min(90vw,340px);max-width:100%"></div>
 
     <!-- Buttons Row -->
-    <div class="flex gap-2 mb-1.5 flex-wrap justify-center">
-      <button id="btn-new-game" class="bg-secondary-container hover:bg-secondary-fixed transition-colors text-on-secondary px-4 py-2.5 rounded-full font-bold flex items-center gap-2 active:scale-95 uppercase tracking-wider text-sm">
-        <span class="material-symbols-outlined text-lg">refresh</span> New Game
+    <div class="flex flex-wrap justify-center" style="gap:clamp(0.3rem,1vw,0.625rem);margin-bottom:clamp(0.2rem,0.5vh,0.5rem)">
+      <button id="btn-new-game" class="btn-premium bg-emerald-600 hover:bg-emerald-500 text-white flex items-center gap-1.5" style="font-size:clamp(11px,2.5vw,14px);padding:clamp(0.3rem,1vh,0.6rem) clamp(0.5rem,2vw,1.2rem);min-height:44px">
+        <span class="material-symbols-outlined" style="font-size:clamp(14px,3vw,18px)">refresh</span> New Game
       </button>
-      <button id="btn-wotd" class="bg-zinc-800 hover:bg-zinc-700 transition-colors text-yellow-400 px-3.5 py-2.5 rounded-full font-bold flex items-center gap-2 active:scale-95 text-sm" title="Word of the Day">
-        <span class="material-symbols-outlined text-lg">calendar_today</span>
+      <button id="btn-wotd" class="btn-premium bg-zinc-800/80 hover:bg-zinc-700 text-amber-400 flex items-center justify-center" style="padding:clamp(0.3rem,1vh,0.6rem) clamp(0.5rem,1.5vw,1rem);min-height:44px;min-width:44px" title="Word of the Day">
+        <span class="material-symbols-outlined" style="font-size:clamp(14px,3vw,18px);line-height:1;display:block">wb_sunny</span>
       </button>
-      <button id="btn-custom-open" class="bg-zinc-800 hover:bg-zinc-700 transition-colors text-indigo-400 px-3.5 py-2.5 rounded-full font-bold flex items-center gap-2 active:scale-95 text-sm" title="Custom Word">
-        <span class="material-symbols-outlined text-lg">edit</span>
+      <button id="btn-custom-open" class="btn-premium bg-zinc-800/80 hover:bg-zinc-700 text-indigo-400 flex items-center justify-center" style="padding:clamp(0.3rem,1vh,0.6rem) clamp(0.5rem,1.5vw,1rem);min-height:44px;min-width:44px" title="Custom Word">
+        <span class="material-symbols-outlined" style="font-size:clamp(14px,3vw,18px);line-height:1;display:block">auto_fix_high</span>
       </button>
-      <button id="btn-practice" class="bg-zinc-800 hover:bg-zinc-700 transition-colors text-purple-400 px-3.5 py-2.5 rounded-full font-bold flex items-center gap-2 active:scale-95 text-sm" title="Practice Mode">
-        <span class="material-symbols-outlined text-lg">school</span>
+      <button id="btn-practice" class="btn-premium bg-zinc-800/80 hover:bg-zinc-700 text-purple-400 flex items-center justify-center" style="padding:clamp(0.3rem,1vh,0.6rem) clamp(0.5rem,1.5vw,1rem);min-height:44px;min-width:44px" title="Practice Mode">
+        <span class="material-symbols-outlined" style="font-size:clamp(14px,3vw,18px);line-height:1;display:block">psychology</span>
       </button>
     </div>
     <!-- Second Row: Archive, Speed, Multiplayer -->
-    <div class="flex gap-2 mb-2 justify-center flex-wrap">
-      <button id="btn-archive" class="bg-zinc-800 hover:bg-zinc-700 transition-colors text-blue-400 px-3.5 py-2 rounded-full font-bold flex items-center gap-1.5 active:scale-95 text-xs uppercase tracking-wider" title="Word Archive">
-        <span class="material-symbols-outlined text-base">history</span> Archive
+    <div class="flex flex-wrap justify-center" style="gap:clamp(0.3rem,1vw,0.625rem);margin-bottom:clamp(0.2rem,0.5vh,0.75rem)">
+      <button id="btn-archive" class="btn-premium bg-zinc-900/50 border border-zinc-800 text-blue-400 flex items-center gap-1" style="font-size:clamp(9px,2vw,12px);padding:clamp(0.2rem,0.6vh,0.4rem) clamp(0.3rem,1vw,0.7rem);min-height:36px" title="Word Archive">
+        <span class="material-symbols-outlined" style="font-size:clamp(12px,2.5vw,16px)">history</span> Archive
       </button>
-      <button id="btn-speed" class="bg-zinc-800 hover:bg-zinc-700 transition-colors text-orange-400 px-3.5 py-2 rounded-full font-bold flex items-center gap-1.5 active:scale-95 text-xs uppercase tracking-wider" title="Speed Mode">
-        <span class="material-symbols-outlined text-base">bolt</span> Speed
+      <button id="btn-speed" class="btn-premium bg-zinc-900/50 border border-zinc-800 text-orange-400 flex items-center gap-1" style="font-size:clamp(9px,2vw,12px);padding:clamp(0.2rem,0.6vh,0.4rem) clamp(0.3rem,1vw,0.7rem);min-height:36px" title="Speed Mode">
+        <span class="material-symbols-outlined" style="font-size:clamp(12px,2.5vw,16px)">bolt</span> Speed
       </button>
-      <button id="btn-multi" class="bg-zinc-800 hover:bg-zinc-700 transition-colors text-indigo-300 px-3.5 py-2 rounded-full font-bold flex items-center gap-1.5 active:scale-95 text-xs uppercase tracking-wider" title="Multiplayer">
-        <span class="material-symbols-outlined text-base">group</span> 2 Players
+      <button id="btn-multi" class="btn-premium bg-zinc-900/50 border border-zinc-800 text-indigo-300 flex items-center gap-1" style="font-size:clamp(9px,2vw,12px);padding:clamp(0.2rem,0.6vh,0.4rem) clamp(0.3rem,1vw,0.7rem);min-height:36px" title="Multiplayer">
+        <span class="material-symbols-outlined" style="font-size:clamp(12px,2.5vw,16px)">group</span> 2 Players
       </button>
     </div>
 
   </div><!-- /top section -->
 
   <!-- Keyboard — always at bottom -->
-  <div class="w-full space-y-1.5 select-none pb-1">
-    <div id="kb-row-1" class="flex justify-center gap-keyboard-gap"></div>
-    <div id="kb-row-2" class="flex justify-center gap-keyboard-gap px-4"></div>
-    <div id="kb-row-3" class="flex justify-center gap-keyboard-gap"></div>
+  <div id="keyboard-wrapper" class="w-full select-none fixed bottom-0 left-1/2 -translate-x-1/2 z-40 bg-zinc-950/80 backdrop-blur-md pb-2 pt-2" style="max-width: 600px; padding-bottom: max(0.5rem, env(safe-area-inset-bottom));">
+    <div class="space-y-1.5">
+      <div id="kb-row-1" class="flex justify-center" style="gap:clamp(3px,0.8vw,6px)"></div>
+      <div id="kb-row-2" class="flex justify-center" style="gap:clamp(3px,0.8vw,6px);padding:0 clamp(4px,2vw,16px)"></div>
+      <div id="kb-row-3" class="flex justify-center" style="gap:clamp(3px,0.8vw,6px)"></div>
+    </div>
   </div>
 </main>
 
@@ -593,35 +1037,50 @@
 
 <!-- ─── Stats Modal ───────────────────────────────────────────────────── -->
 <div id="modal-stats" class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 hidden">
-  <div class="modal-bg bg-surface-container-low border border-outline-variant w-full max-w-[400px] p-8 relative rounded">
-    <button class="modal-close absolute top-4 right-4 text-zinc-400 hover:text-white"><span class="material-symbols-outlined">close</span></button>
-    <h2 class="font-headline-sm text-headline-sm text-center mb-6 uppercase tracking-widest">STATISTICS</h2>
-    <div class="flex justify-between text-center mb-8">
-      <div><div id="stat-played" class="text-3xl font-bold">0</div><div class="text-[10px] uppercase font-bold text-zinc-400">Played</div></div>
-      <div><div id="stat-win" class="text-3xl font-bold">0</div><div class="text-[10px] uppercase font-bold text-zinc-400">Win %</div></div>
-      <div>
+  <div class="modal-bg bg-surface-container-low border border-outline-variant w-full max-w-[420px] p-8 relative rounded-3xl">
+    <button class="modal-close absolute top-5 right-5 text-zinc-500 hover:text-white transition-colors">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+    <h2 class="font-headline-sm text-headline-sm text-center mb-8 uppercase tracking-[0.2em] font-black text-zinc-100">Statistics</h2>
+    
+    <div class="grid grid-cols-4 gap-2 text-center mb-8">
+      <div class="bg-white/5 p-3 rounded-2xl border border-white/5">
+        <div id="stat-played" class="text-2xl font-black text-white">0</div>
+        <div class="text-[9px] uppercase font-bold text-zinc-500 tracking-wider">Played</div>
+      </div>
+      <div class="bg-white/5 p-3 rounded-2xl border border-white/5">
+        <div id="stat-win" class="text-2xl font-black text-emerald-400">0</div>
+        <div class="text-[9px] uppercase font-bold text-zinc-500 tracking-wider">Win %</div>
+      </div>
+      <div class="bg-white/5 p-3 rounded-2xl border border-white/5">
         <div class="flex items-center justify-center gap-1">
-          <div id="stat-streak" class="text-3xl font-bold">0</div>
-          <span id="streak-fire" class="hidden text-xl">🔥</span>
+          <div id="stat-streak" class="text-2xl font-black text-white">0</div>
+          <span id="streak-fire" class="hidden text-base">🔥</span>
         </div>
-        <div class="text-[10px] uppercase font-bold text-zinc-400">Streak</div>
+        <div class="text-[9px] uppercase font-bold text-zinc-500 tracking-wider">Streak</div>
       </div>
-      <div><div id="stat-max-streak" class="text-3xl font-bold">0</div><div class="text-[10px] uppercase font-bold text-zinc-400">Max Streak</div></div>
+      <div class="bg-white/5 p-3 rounded-2xl border border-white/5">
+        <div id="stat-max-streak" class="text-2xl font-black text-white">0</div>
+        <div class="text-[9px] uppercase font-bold text-zinc-500 tracking-wider">Max</div>
+      </div>
     </div>
-    <div class="flex justify-between text-center mb-6 text-xs text-zinc-400 border border-outline-variant rounded p-3">
-      <div><div id="stat-best-time" class="text-lg font-bold text-white">—</div><div class="uppercase font-bold">Best Time</div></div>
-      <div><div id="stat-avg-guess" class="text-lg font-bold text-white">—</div><div class="uppercase font-bold">Avg Guesses</div></div>
-      <div><div id="stat-hints" class="text-lg font-bold text-white">0</div><div class="uppercase font-bold">Hints Used</div></div>
+    
+    <div class="flex justify-between text-center mb-8 text-xs bg-white/5 border border-white/10 rounded-2xl p-4">
+      <div><div id="stat-best-time" class="text-base font-black text-emerald-400">—</div><div class="text-[9px] uppercase font-bold text-zinc-500 tracking-tighter">Best Time</div></div>
+      <div><div id="stat-avg-guess" class="text-base font-black text-amber-400">—</div><div class="text-[9px] uppercase font-bold text-zinc-500 tracking-tighter">Avg Guesses</div></div>
+      <div><div id="stat-hints" class="text-base font-black text-blue-400">0</div><div class="text-[9px] uppercase font-bold text-zinc-500 tracking-tighter">Hints</div></div>
     </div>
-    <h3 class="font-bold text-sm mb-4 uppercase tracking-wider text-zinc-400">Guess Distribution</h3>
-    <div id="dist-bars" class="space-y-2 mb-8"></div>
+
+    <h3 class="font-bold text-xs mb-4 uppercase tracking-[0.15em] text-zinc-500">Guess Distribution</h3>
+    <div id="dist-bars" class="space-y-2.5 mb-10"></div>
+    
     <div class="flex gap-4">
-      <div class="flex-1 text-center border-r border-outline-variant pr-4">
-        <div class="text-[10px] uppercase font-bold text-zinc-400 mb-1">Answer</div>
-        <div id="stat-answer" class="text-xl font-mono font-bold tracking-widest text-secondary">—</div>
+      <div class="flex-1 text-center bg-white/5 rounded-2xl py-3 border border-white/5">
+        <div class="text-[9px] uppercase font-bold text-zinc-500 mb-1 tracking-widest">Answer</div>
+        <div id="stat-answer" class="text-lg font-mono font-black tracking-[0.2em] text-emerald-400">—</div>
       </div>
-      <button id="btn-share" class="flex-1 bg-secondary-container hover:bg-secondary-fixed text-on-secondary font-bold py-3 rounded-sm flex items-center justify-center gap-2 uppercase tracking-tighter">
-        Share <span class="material-symbols-outlined text-sm">share</span>
+      <button id="btn-share" class="flex-1 btn-premium bg-emerald-600 hover:bg-emerald-500 text-white font-black py-4 flex items-center justify-center gap-2 text-sm shadow-lg shadow-emerald-900/20">
+        Share <span class="material-symbols-outlined text-base">share</span>
       </button>
     </div>
   </div>
@@ -631,7 +1090,7 @@
 <div id="modal-settings" class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 hidden">
   <div class="modal-bg bg-surface-container-low border border-outline-variant w-full max-w-[400px] p-8 relative rounded">
     <button class="modal-close absolute top-4 right-4 text-zinc-400 hover:text-white"><span class="material-symbols-outlined">close</span></button>
-    <h2 class="font-headline-sm text-headline-sm text-center mb-6 uppercase tracking-widest">SETTINGS</h2>
+    <h2 class="font-headline-sm text-headline-sm text-center mb-8 uppercase tracking-[0.2em] font-black text-zinc-100">Settings</h2>
     <div class="space-y-5">
       <div class="flex justify-between items-center">
         <div>
@@ -750,11 +1209,10 @@
       </ul>
 
       <a href="https://www.paypal.com/ncp/payment/E2W59V4A5BGZC" target="_blank"
-        class="block w-full text-center py-3 rounded font-black text-sm uppercase tracking-wider transition-colors"
-        style="background:#f59e0b;color:#000;">
-        ⚡ Get Pro — $1.99
+        class="block w-full text-center py-4 rounded-full btn-premium bg-amber-500 text-black font-black text-sm tracking-widest transition-all">
+        ⚡ GET PRO — $1.99
       </a>
-      <p class="text-center text-[10px] text-zinc-600 mt-3">Secure payment via PayPal · Instant unlock after payment</p>
+      <p class="text-center text-[10px] text-zinc-500 mt-4 font-bold tracking-wide">SECURE PAYMENT VIA PAYPAL · INSTANT UNLOCK</p>
     </div>
   </div>
 </div>
@@ -1332,10 +1790,57 @@ function buildGrid(){
   for(let r=0;r<6;r++) for(let c=0;c<5;c++){
     const d=document.createElement("div");
     d.id=`tile-${r}-${c}`;
-    d.className="w-full aspect-square border-2 border-surface-container-high tile-empty flex items-center justify-center font-display-tile text-display-tile text-primary transition-all duration-100";
+    d.className="w-full border-2 border-surface-container-high tile-empty flex items-center justify-center font-display-tile text-primary transition-all duration-100";
+    d.style.cssText="font-size:clamp(14px,5.5vw,34px);";
     grid.appendChild(d);
   }
+  resizeGrid();
 }
+
+// Dynamically size the grid to fit within the viewport
+function resizeGrid(){
+  const doResize = ()=>{
+    // Use visualViewport if available for most accurate height
+    const vh = window.visualViewport ? window.visualViewport.height : document.documentElement.clientHeight;
+    const header = document.querySelector('header');
+    const headerH = header ? header.offsetHeight : 48;
+    
+    // Measure keyboard's actual visual footprint (accounts for bottom offset from ads)
+    const kbWrap = document.getElementById('keyboard-wrapper');
+    const kbTop = kbWrap ? kbWrap.getBoundingClientRect().top : (vh - 170);
+    const kbH = Math.max(vh - kbTop, kbWrap ? kbWrap.offsetHeight : 170, 150);
+    
+    // Measure actual button heights from DOM
+    const btnRows = document.querySelectorAll('main .flex.flex-wrap.justify-center');
+    let btnH = 0;
+    btnRows.forEach(r => {
+      const style = getComputedStyle(r);
+      btnH += r.offsetHeight + parseFloat(style.marginTop || 0) + parseFloat(style.marginBottom || 0) + 4;
+    });
+    if(btnH < 30) btnH = 80;
+    
+    // Toast + margins/padding
+    const misc = 64;
+    
+    const gridAvailable = vh - headerH - kbH - btnH - misc;
+    const grid = $("grid");
+    if(!grid || gridAvailable < 60) return;
+    
+    // Set explicit grid height
+    grid.style.height = Math.max(60, gridAvailable) + "px";
+    
+    // Width to keep tiles square: tileH = gridAvailable / 6 - gaps
+    const gapPx = 6;
+    const tileH = (Math.max(60, gridAvailable) - 5 * gapPx) / 6;
+    const gridW = tileH * 5 + 4 * gapPx;
+    grid.style.width = Math.min(gridW, window.innerWidth * 0.92, 380) + "px";
+    grid.style.maxWidth = "100%";
+  };
+  setTimeout(doResize, 150);
+  setTimeout(doResize, 500);
+}
+window.addEventListener("resize", ()=> resizeGrid());
+if(window.visualViewport) window.visualViewport.addEventListener("resize", ()=> resizeGrid());
 
 function getTile(r,c){ return $(`tile-${r}-${c}`); }
 
@@ -1414,7 +1919,8 @@ function buildKeyboard(){
       const btn=document.createElement("div");
       btn.id=`key-${key}`;
       const wide=key==="ENTER"||key==="⌫";
-      btn.className=`key-base h-14 ${wide?"flex-[1.5] max-w-[65px]":"flex-1 max-w-[44px]"} flex items-center justify-center bg-surface-variant rounded-md font-key-label text-key-label text-primary cursor-pointer active:bg-outline-variant select-none`;
+      btn.className=`kb-key key-base flex items-center justify-center cursor-pointer select-none ${wide?"wide flex-[1.5]":"flex-1"}`;
+      btn.style.cssText=`min-width:${wide?'clamp(44px,11vw,70px)':'clamp(26px,7.5vw,48px)'};max-width:${wide?'75px':'52px'};`;
       btn.textContent=key;
       btn.addEventListener("click",()=>handleKey(key));
       row.appendChild(btn);
@@ -1424,14 +1930,18 @@ function buildKeyboard(){
 
 function applyKeyColor(el, state){
   const cb=document.body.classList.contains("cb");
+  const isLight=document.body.classList.contains("light");
   if(state==="correct"){
-    el.style.backgroundColor=cb?"#f5793a":"#155519"; el.style.color="white";
+    el.style.setProperty("background-color", cb?"#f5793a":"#155519", "important");
+    el.style.setProperty("color", "white", "important");
     el.classList.add("key-correct"); el.classList.remove("text-zinc-500","cursor-not-allowed");
   } else if(state==="present"){
-    el.style.backgroundColor=cb?"#85c0f9":"#b45309"; el.style.color="white";
+    el.style.setProperty("background-color", cb?"#85c0f9":"#b45309", "important");
+    el.style.setProperty("color", "white", "important");
     el.classList.add("key-present"); el.classList.remove("text-zinc-500","cursor-not-allowed");
   } else {
-    el.style.backgroundColor="#1c1b1b"; el.style.color="#71717a";
+    el.style.setProperty("background-color", isLight?"#9ca3af":"#3f3f46", "important");
+    el.style.setProperty("color", isLight?"#4b5563":"#71717a", "important");
     el.classList.add("text-zinc-500","cursor-not-allowed");
   }
 }
@@ -1618,9 +2128,11 @@ function showDefinition(){
 // ════════════════════════════════════════════════════════════════════════
 const TUT_TOTAL = 6;
 let tutStep = 1;
+let tutAutoTimer = null;
 
 function tutShowStep(n){
   tutStep = n;
+  if(tutAutoTimer) { clearTimeout(tutAutoTimer); tutAutoTimer = null; }
   for(let i=1;i<=TUT_TOTAL;i++){
     const el=$(`tut-${i}`);
     el.classList.toggle("active", i===n);
@@ -1634,15 +2146,24 @@ function tutShowStep(n){
   $("tut-next").classList.toggle("hidden", isLast);
 }
 
-function openTutorial(){
+function openTutorial(autoDismiss = false){
+  if(tutAutoTimer) clearTimeout(tutAutoTimer);
   // build dots
   const dots=$("tut-dots"); dots.innerHTML="";
   for(let i=0;i<TUT_TOTAL;i++) dots.innerHTML+=`<div class="tut-progress-dot"></div>`;
   tutShowStep(1);
   $("tutorial-overlay").classList.remove("hidden");
+  
+  if(autoDismiss) {
+    tutAutoTimer = setTimeout(() => {
+      closeTutorial();
+      localStorage.setItem('wordvo-tut-done', '1');
+    }, 1500);
+  }
 }
 
 function closeTutorial(){
+  if(tutAutoTimer) clearTimeout(tutAutoTimer);
   $("tutorial-overlay").classList.add("hidden");
   if($("tut-dont-show").checked) localStorage.setItem("wordvo-tut-done","1");
 }
@@ -1817,7 +2338,7 @@ function newGame(word=null, isWotd=false, isCustom=false, isPractice=false){
   guesses=[]; current=""; gameOver=false; hintsUsed=0;
   stopTimer(); timerSeconds=0;
   $("timer-display").textContent="0:00";
-  buildGrid(); buildKeyboard();
+  buildGrid(); buildKeyboard(); resizeGrid();
   $("toast-msg").classList.add("hidden");
   $("def-box").classList.add("hidden");
   if(practiceMode) $("grid").classList.add("practice-grid");
@@ -2128,7 +2649,6 @@ window.addEventListener("beforeinstallprompt",e=>{
   // show install button in header
   const hib=document.getElementById("header-install-btn");
   if(hib) hib.style.display="flex";
-  $("btn-install").style.display="block";
 });
 
 // Header install button
@@ -2142,26 +2662,14 @@ window.addEventListener("beforeinstallprompt",e=>{
       deferredPrompt.prompt(); deferredPrompt=null;
       hib.style.display="none";
     } else if(isIOS){
-      // Show iOS instructions toast
-      showToast("Tap Share → Add to Home Screen 📱");
+      showToast("iPhone: Tap Share 📤 → Add to Home Screen");
     }
   });
+
+
 })();
 
-$("btn-install-action").addEventListener("click",()=>{
-  if(deferredPrompt){ deferredPrompt.prompt(); deferredPrompt=null; $("btn-install").style.display="none"; }
-  else if(isIOS){ showToast("Tap Share → Add to Home Screen 📱"); }
-});
 
-// ════════════════════════════════════════════════════════════════════════
-// INTRO SCREEN
-// ════════════════════════════════════════════════════════════════════════
-$("btn-play-intro").addEventListener("click",()=>{
-  const intro=$("intro");
-  intro.style.opacity="0"; intro.style.transition="opacity 0.4s";
-  setTimeout(()=>intro.remove(), 400);
-  resumeAC();
-});
 
 // ════════════════════════════════════════════════════════════════════════
 // SHARED UTILITY — exit any special mode cleanly
@@ -2410,10 +2918,6 @@ $("btn-multi-quit").addEventListener("click",()=>{
     }
   }
   newGame();
-  // Show tutorial on first visit (after intro fades)
-  if(!localStorage.getItem("wordvo-tut-done")){
-    setTimeout(()=>openTutorial(), 800);
-  }
 })();
 </script>
 <script>
@@ -2426,10 +2930,53 @@ $("btn-multi-quit").addEventListener("click",()=>{
     var adWrap=document.createElement("div");
     adWrap.id="ad-wrapper";
     document.body.appendChild(adWrap);
+    var kbw = document.getElementById("keyboard-wrapper");
+    if(kbw) kbw.style.bottom = "clamp(50px, 8vh, 70px)";
+    // Re-run layout after keyboard is repositioned for ad space
+    setTimeout(function(){ if(typeof resizeGrid==="function") resizeGrid(); }, 100);
     var s=document.createElement("script");
     s.src="https://pl29276185.profitablecpmratenetwork.com/57/d7/2b/57d72bc5e24372dfc589e78cd125aa3d.js";
     adWrap.appendChild(s);
   }
+</script>
+
+<!-- ═══ Service Worker Registration + PWA Install Prompt ═══════════════ -->
+<script>
+  // Register service worker
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js')
+        .then(reg => console.log('[SW] registered, scope:', reg.scope))
+        .catch(err => console.warn('[SW] registration failed:', err));
+    });
+  }
+
+  // PWA install prompt
+  let deferredPrompt = null;
+  const installBtn = document.getElementById('header-install-btn');
+
+  window.addEventListener('beforeinstallprompt', e => {
+    e.preventDefault();
+    deferredPrompt = e;
+    if (installBtn) installBtn.style.display = 'inline-flex';
+  });
+
+  if (installBtn) {
+    installBtn.addEventListener('click', async () => {
+      if (!deferredPrompt) return;
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      console.log('[PWA] install outcome:', outcome);
+      deferredPrompt = null;
+      installBtn.style.display = 'none';
+    });
+  }
+
+  window.addEventListener('appinstalled', () => {
+    console.log('[PWA] installed');
+    deferredPrompt = null;
+    if (installBtn) installBtn.style.display = 'none';
+  });
 </script>
 </body>
 </html>
